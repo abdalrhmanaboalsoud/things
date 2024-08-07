@@ -92,11 +92,11 @@ WSGI_APPLICATION = 'things.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',       # Database name
-        'USER': 'postgres',          # Database user
-        'PASSWORD': 'postgres',  # Database password
-        'HOST': 'db',       # Host (localhost if Docker is running locally)
-        'PORT': '5432',            # Port
+        'NAME': 'kenyjkti',
+        'USER': 'kenyjkti',
+        'PASSWORD': 'eGKFZ8OTF7L9hrFReHCNfo2K6mwXpn96',
+        'HOST': 'tyke.db.elephantsql.com',
+        'PORT':'5432'
     }
 }
 
