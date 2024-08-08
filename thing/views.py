@@ -10,7 +10,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticate
 class ThingList(ListCreateAPIView):
     queryset = Thing.objects.all()
     serializer_class = ThingSerializer
-    permission_classes = [IsAuthenticated]  # Corrected typo here
+    permission_classes = [IsAuthenticated]  
 
     def perform_create(self, serializer):
         # Ensure the owner is set to the current user
@@ -20,4 +20,4 @@ class ThingList(ListCreateAPIView):
 class ThingDetail(RetrieveUpdateDestroyAPIView):
     queryset = Thing.objects.all()
     serializer_class = ThingSerializer
-    permission_classes = [IsOwnerOnly]  # Corrected typo here
+    permission_classes = [IsOwnerOnly]  

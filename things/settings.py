@@ -11,40 +11,37 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import dj_database_url
+from dotenv import load_dotenv
+
+
+# Load environment variables from a .env file
+load_dotenv()  # This will load all the variables defined in .env file into the environment
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-b-+sz*3$9o&r7nl^g#^ky6&m(vt8a#c4t(r#!rr7kka=gumh*w'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-secret-key-if-env-var-missing')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0,.railway.app').split(',')
 
 # Application definition
 INSTALLED_APPS = [
-    # Django admin site.
     'django.contrib.admin',
-    # Authentication framework.
     'django.contrib.auth',
-    # Content types framework.
     'django.contrib.contenttypes',
-    # Sessions framework.
     'django.contrib.sessions',
-    # Messages framework.
     'django.contrib.messages',
-    # Static files framework.
     'django.contrib.staticfiles',
-    # REST framework for building Web APIs.
     'rest_framework',
-    # Our own application, defining the models, views, and URLs.
     'thing',
 ]
 
@@ -78,28 +75,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'things.wsgi.application'
 
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'kenyjkti',
-        'USER': 'kenyjkti',
-        'PASSWORD': 'eGKFZ8OTF7L9hrFReHCNfo2K6mwXpn96',
-        'HOST': 'tyke.db.elephantsql.com',
-        'PORT':'5432'
-    }
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
-
-# Password validation
-# https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -116,10 +94,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/4.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -128,19 +102,21 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Directory where collectstatic will collect static files
 
-STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',  # Additional static files directory
+]
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,  # Only show toolbar in DEBUG mode
+}
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
