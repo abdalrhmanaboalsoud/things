@@ -31,7 +31,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'fallback-secret-key-if-env-var-miss
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,0.0.0.0,.railway.app').split(',')
+ALLOWED_HOST = ['*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -74,10 +74,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'things.wsgi.application'
-
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': os.getenv('POSTGRES_USER'),
+        'NAME': os.getenv('POSTGRES_DB'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST', 'db'),  # Default to 'db' which is the service name in docker-compose
+        'PORT': os.getenv('POSTGRES_PORT', '5432'),  # Default PostgreSQL port
+    }
 }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
