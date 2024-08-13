@@ -1,20 +1,19 @@
-version: "3"
+version: "3.9"
 
 services:
   web:
     build: .
-    command: gunicorn things.wsgi:application --bind 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
       - "8000:8000"
     depends_on:
-      - db
-    env_file:
-      - .env
+    - db
+
 
   db:
-    image: postgres:latest
+    image: postgres
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
